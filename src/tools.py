@@ -11,41 +11,52 @@ from typing import Dict, Any
 # ==============================================================================
 
 TOOLS_SCHEMA = [
-    # Tool 1: Đã được định nghĩa mẫu sẵn cho Học viên tham khảo
+    # Tool 1: Tra cứu tài liệu
     {
-        "name": "academic_query",
-        "description": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên.",
+        "name": "library_query",
+        "description": "Tra cứu thông tin, vị trí và tình trạng mượn/trả của sách/tài liệu trong thư viện.",
         "parameters": {
             "type": "object",
             "properties": {
-                "student_id": {
+                "document_id": {
                     "type": "string",
-                    "description": "Mã sinh viên cần tra cứu (ví dụ: 'SV2026001')"
+                    "description": "Mã tài liệu cần tra cứu (ví dụ: 'DOC2026001')"
                 }
             },
-            "required": ["student_id"]
+            "required": ["document_id"]
         }
     },
     
     # --------------------------------------------------------------------------
-    # TODO 1.2: HỌC VIÊN HOÀN THIỆN TOOL SCHEMA CHO 'schedule_appointment'
+    # TODO 1.2: HỌC VIÊN HOÀN THIỆN TOOL SCHEMA CHO 'renew_document'
     # 🎯 YÊU CẦU THIẾT KẾ SCHEMA (JSON SCHEMA STANDARD):
-    # 1. Tool dùng để đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.
+    # 1. Tool dùng để gia hạn tài liệu thư viện.
     # 2. Thiết kế các tham số (properties) để LLM trích xuất:
-    #    - student_id (string): Mã sinh viên cần đặt lịch (ví dụ: 'SV2026001')
-    #    - datetime_str (string): Thời gian hẹn (ví dụ: '14:00 15/09/2026')
-    #    - advisor_name (string): Tên cố vấn học tập
+    #    - document_id (string): Mã tài liệu cần gia hạn (ví dụ: 'DOC2026001')
+    #    - new_due_date (string): Thời gian hạn trả mới mong muốn (ví dụ: '25/09/2026')
+    #    - student_id (string): Mã sinh viên đang mượn
     # 3. Khai báo danh sách các trường bắt buộc (required).
     # --------------------------------------------------------------------------
     {
-        "name": "schedule_appointment",
-        "description": "Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.",
+        "name": "renew_document",
+        "description": "Gia hạn thời gian mượn sách/tài liệu thư viện.",
         "parameters": {
             "type": "object",
             "properties": {
-                # TODO 1.2: Khai báo các thuộc tính tham số cho Tool tại đây...
+                "document_id": {
+                    "type": "string",
+                    "description": "Mã tài liệu cần gia hạn (ví dụ: 'DOC2026001')"
+                },
+                "new_due_date": {
+                    "type": "string",
+                    "description": "Thời gian hạn trả mới mong muốn (ví dụ: '25/09/2026')"
+                },
+                "student_id": {
+                    "type": "string",
+                    "description": "Mã sinh viên đang mượn sách"
+                }
             },
-            "required": [] # TODO 1.2: Khai báo danh sách các trường bắt buộc tại đây...
+            "required": ["document_id", "new_due_date", "student_id"]
         }
     }
 ]
@@ -55,57 +66,57 @@ TOOLS_SCHEMA = [
 # ==============================================================================
 
 MOCK_DATABASE = {
-    "SV2026001": {
-        "full_name": "Nguyễn Văn An",
-        "class": "AI-K4",
-        "gpa": 3.85,
-        "email": "an.nv@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "PGS.TS Nguyễn Văn A"
+    "DOC2026001": {
+        "title": "Artificial Intelligence: A Modern Approach",
+        "author": "Stuart Russell, Peter Norvig",
+        "location": "Tầng 3, Khu Kỹ thuật",
+        "status": "Đang cho mượn",
+        "borrower_id": "SV2026001",
+        "due_date": "15/09/2026"
     },
-    "SV2026002": {
-        "full_name": "Trần Thị Bình",
-        "class": "AI-K4",
-        "gpa": 3.60,
-        "email": "binh.tt@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "TS. Lê Thị B"
+    "DOC2026002": {
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "location": "Tầng 2, Khu IT",
+        "status": "Sẵn sàng",
+        "borrower_id": None,
+        "due_date": None
     }
 }
 
 
-def execute_academic_query(student_id: str) -> str:
-    """Thực thi tra cứu học vụ theo mã sinh viên"""
-    student = MOCK_DATABASE.get(student_id.strip().upper())
-    if student:
+def execute_library_query(document_id: str) -> str:
+    """Thực thi tra cứu tài liệu theo mã tài liệu"""
+    document = MOCK_DATABASE.get(document_id.strip().upper())
+    if document:
         return json.dumps({
             "status": "SUCCESS",
-            "student_id": student_id,
-            "data": student
+            "document_id": document_id,
+            "data": document
         }, ensure_ascii=False)
     else:
         return json.dumps({
             "status": "NOT_FOUND",
-            "message": f"Không tìm thấy dữ liệu sinh viên có mã '{student_id}'"
+            "message": f"Không tìm thấy dữ liệu tài liệu có mã '{document_id}'"
         }, ensure_ascii=False)
 
 
-def execute_schedule_appointment(student_id: str, datetime_str: str, advisor_name: str = "PGS.TS Nguyễn Văn A") -> str:
-    """Thực thi đặt lịch hẹn tư vấn học vụ"""
+def execute_renew_document(document_id: str, new_due_date: str, student_id: str) -> str:
+    """Thực thi gia hạn tài liệu"""
     return json.dumps({
         "status": "SUCCESS",
-        "booking_id": f"BK-{student_id}-99",
+        "renewal_id": f"RN-{document_id}-{student_id}",
+        "document_id": document_id,
+        "new_due_date": new_due_date,
         "student_id": student_id,
-        "datetime": datetime_str,
-        "advisor": advisor_name,
-        "message": f"Đặt lịch thành công cho sinh viên {student_id} với {advisor_name} vào lúc {datetime_str}."
+        "message": f"Gia hạn thành công tài liệu {document_id} cho sinh viên {student_id} đến ngày {new_due_date}."
     }, ensure_ascii=False)
 
 
 # Router gọi tool thực tế
 TOOL_ROUTER = {
-    "academic_query": execute_academic_query,
-    "schedule_appointment": execute_schedule_appointment
+    "library_query": execute_library_query,
+    "renew_document": execute_renew_document
 }
 
 def dispatch_tool_call(tool_name: str, arguments: Dict[str, Any]) -> str:

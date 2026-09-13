@@ -38,25 +38,25 @@ class MockOfflineProvider(BaseLLMProvider):
         prompt_lower = prompt.lower()
         
         # Mô phỏng nhận diện intent gọi Tool
-        if "sv2026001" in prompt_lower and "đặt lịch" in prompt_lower:
+        if "doc2026001" in prompt_lower and "gia hạn" in prompt_lower:
             return {
                 "type": "tool_call",
-                "tool_name": "schedule_appointment",
-                "arguments": {"student_id": "SV2026001", "datetime_str": "14:00 15/09/2026", "advisor_name": "PGS.TS Nguyễn Văn A"},
-                "thought": "Người dùng yêu cầu đặt lịch hẹn tư vấn cho sinh viên SV2026001. Tôi sẽ gọi tool schedule_appointment."
+                "tool_name": "renew_document",
+                "arguments": {"document_id": "DOC2026001", "new_due_date": "25/09/2026", "student_id": "SV2026001"},
+                "thought": "Người dùng yêu cầu gia hạn tài liệu DOC2026001. Tôi sẽ gọi tool renew_document."
             }
-        elif "sv2026001" in prompt_lower or "tra cứu" in prompt_lower:
+        elif "doc2026001" in prompt_lower or "tra cứu" in prompt_lower:
             return {
                 "type": "tool_call",
-                "tool_name": "academic_query",
-                "arguments": {"student_id": "SV2026001"},
-                "thought": "Người dùng muốn tra cứu thông tin học vụ của sinh viên SV2026001. Tôi sẽ gọi tool academic_query."
+                "tool_name": "library_query",
+                "arguments": {"document_id": "DOC2026001"},
+                "thought": "Người dùng muốn tra cứu thông tin tài liệu DOC2026001. Tôi sẽ gọi tool library_query."
             }
         else:
             return {
                 "type": "text",
-                "content": f"[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-                "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool."
+                "content": f"[Mock Agent Response]: Xin chào! Nội quy thư viện VinUni yêu cầu trả sách đúng hạn và giữ gìn tài liệu cẩn thận.",
+                "thought": "Câu hỏi chung về nội quy thư viện, trả lời trực tiếp không cần gọi Tool."
             }
 
 

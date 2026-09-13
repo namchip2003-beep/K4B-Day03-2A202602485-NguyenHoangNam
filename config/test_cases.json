@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, bạn có thể giới thiệu nội quy thư viện VinUni không?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ System Prompt, không cần gọi bất kỳ Tool nào.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu thông tin của tài liệu mã DOC2026001.",
+    "expected_behavior": "Agent nhận diện nhu cầu tra cứu, tự động phát sinh Tool Call 'library_query' với mã DOC2026001.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "appointment_booking",
+    "question": "Tôi là sinh viên SV2026001, tôi muốn gia hạn quyển sách có mã DOC2026001 đến ngày 25/09/2026.",
+    "expected_behavior": "Agent tự động phát sinh Tool Call 'renew_document' với đúng thông tin sinh viên, mã tài liệu và thời gian gia hạn.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Mã tài liệu DOC2026001 hiện đang nằm ở đâu và có thể cho tôi (SV2026002) mượn được không?",
+    "expected_behavior": "Agent thực hiện chuỗi suy luận ReAct: Tra cứu tình trạng sách DOC2026001 trước, thấy sách đang được mượn, thông báo lại cho sinh viên.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Kiểm tra giúp tôi sách có mã DOC9999999.",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND từ Tool và đưa ra phản hồi lịch sự, chính xác không bịa đặt dữ liệu.",
+    "complexity": "Medium"
+  }
+]
