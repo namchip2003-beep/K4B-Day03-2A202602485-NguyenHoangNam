@@ -1,7 +1,15 @@
 [
   {
     "step": 1,
-    "query": "Tra cứu giúp tôi sách mã DOC2026001 đang ở đâu",
+    "query": "Chào bạn, bạn có thể giới thiệu nội quy thư viện VinUni không?",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn! Dưới đây là các quy định chung và nội quy khi sử dụng Thư viện Đại học VinUni:\n\n1. **Thẻ Thư viện / Thẻ Sinh viên:**\n   - Quét/xuất trình Thẻ Sinh viên VinUni hợp lệ khi vào Thư viện và khi thực hiện các giao dịch mượn/trả sách.\n   - Không sử dụng thẻ của người khác hoặc cho người khác mượn thẻ.\n\n2. **Quy định Giữ gìn Trật tự & Không gian Học tập:**\n   - Giữ im lặng tại các khu vực yên tĩnh (Quiet Study Zone). Với các phòng học nhóm, vui lòng giữ âm lượng vừa phải.\n   - Tắt tiếng hoặc để điện thoại ở chế độ rung; di chuyển ra ngoài khu vực đọc sách khi nghe/gọi điện thoại.\n   - Giữ vệ sinh chung, bỏ rác đúng nơi quy định.\n\n3. **Bảo vệ Tài sản & Tài liệu:**\n   - Giữ gìn sách, tài liệu và thiết bị thư viện; không đánh dấu, viết, vẽ, gấp trang hay làm hư hỏng tài liệu.\n   - Không tự ý mang tài liệu chưa qua thủ tục mượn ra khỏi Thư viện.\n\n4. **Quy định Mượn / Trả & Gia hạn Sách:**\n   - Trả sách đúng hạn theo quy định để tránh bị tính phí phạt hoặc tạm khóa quyền mượn sách.\n   - Bạn có thể thực hiện gia hạn thời gian mượn sách trước khi hết hạn (nếu tài liệu đó chưa có người khác đặt trước).\n\nNếu bạn cần tra cứu tình trạng một tài liệu cụ thể hoặc muốn gia hạn mượn sách, vui lòng cung cấp **Mã tài liệu (Document ID)** hoặc **Mã sinh viên**, mình sẽ hỗ trợ bạn ngay nhé!",
+    "latency_ms": 7746.38
+  },
+  {
+    "step": 1,
+    "query": "Hãy tra cứu thông tin của tài liệu mã DOC2026001.",
     "action_type": "TOOL_EXECUTION",
     "tool_name": "library_query",
     "arguments": {
@@ -19,14 +27,80 @@
         "due_date": "15/09/2026"
       }
     },
-    "latency_ms": 2926.25
+    "latency_ms": 1305.16
   },
   {
     "step": 2,
-    "query": "Tra cứu giúp tôi sách mã DOC2026001 đang ở đâu",
+    "query": "Hãy tra cứu thông tin của tài liệu mã DOC2026001.",
     "action_type": "FINAL_ANSWER",
     "thought": "Tổng hợp kết quả từ MCP Server thành công.",
     "output": "Kết quả tra cứu tài liệu DOC2026001 (Artificial Intelligence: A Modern Approach - Stuart Russell, Peter Norvig): Vị trí: Tầng 3, Khu Kỹ thuật, Trạng thái: Đang cho mượn, Người mượn: SV2026001, Hạn trả: 15/09/2026",
     "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Tôi là sinh viên SV2026001, tôi muốn gia hạn quyển sách có mã DOC2026001 đến ngày 25/09/2026.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "renew_document",
+    "arguments": {
+      "document_id": "DOC2026001",
+      "new_due_date": "25/09/2026",
+      "student_id": "SV2026001"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "renewal_id": "RN-DOC2026001-SV2026001",
+      "document_id": "DOC2026001",
+      "new_due_date": "25/09/2026",
+      "student_id": "SV2026001",
+      "message": "Gia hạn thành công tài liệu DOC2026001 cho sinh viên SV2026001 đến ngày 25/09/2026."
+    },
+    "latency_ms": 1139.27
+  },
+  {
+    "step": 2,
+    "query": "Tôi là sinh viên SV2026001, tôi muốn gia hạn quyển sách có mã DOC2026001 đến ngày 25/09/2026.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Gia hạn thành công tài liệu DOC2026001 cho sinh viên SV2026001 đến ngày 25/09/2026.",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Mã tài liệu DOC2026001 hiện đang nằm ở đâu và có thể cho tôi (SV2026002) mượn được không?",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "library_query",
+    "arguments": {
+      "document_id": "DOC2026001"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "document_id": "DOC2026001",
+      "data": {
+        "title": "Artificial Intelligence: A Modern Approach",
+        "author": "Stuart Russell, Peter Norvig",
+        "location": "Tầng 3, Khu Kỹ thuật",
+        "status": "Đang cho mượn",
+        "borrower_id": "SV2026001",
+        "due_date": "15/09/2026"
+      }
+    },
+    "latency_ms": 1162.01
+  },
+  {
+    "step": 2,
+    "query": "Mã tài liệu DOC2026001 hiện đang nằm ở đâu và có thể cho tôi (SV2026002) mượn được không?",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Kết quả tra cứu tài liệu DOC2026001 (Artificial Intelligence: A Modern Approach - Stuart Russell, Peter Norvig): Vị trí: Tầng 3, Khu Kỹ thuật, Trạng thái: Đang cho mượn, Người mượn: SV2026001, Hạn trả: 15/09/2026",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Kiểm tra giúp tôi sách có mã DOC9999999.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Câu hỏi chung về nội quy thư viện, trả lời trực tiếp không cần gọi Tool.",
+    "output": "[Mock Agent Response]: Xin chào! Nội quy thư viện VinUni yêu cầu trả sách đúng hạn và giữ gìn tài liệu cẩn thận.",
+    "latency_ms": 1374.6
   }
 ]
